@@ -19,7 +19,11 @@ app.get('/capture', async (req, res) => {
     try {
         const { url } = req.query;
 
-        const browser = await puppeteer.launch({headless: 'new'});
+        // const browser = await puppeteer.launch({headless: 'new'});
+        const browser = await puppeteer.launch({
+            headless: 'new',
+            args: ['--no-sandbox', '--disable-setuid-sandbox']
+        }); 
         const page = await browser.newPage();
         await page.setViewport({
             width: 1366,
