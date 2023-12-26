@@ -3,6 +3,7 @@ const puppeteer = require('puppeteer');
 const cors = require('cors')
 const app = express();
 const PORT = 3001;
+require("dotenv").config()
 
 app.use(express.json());
 app.use(cors())
@@ -21,9 +22,15 @@ app.get('/capture', async (req, res) => {
 
         // const browser = await puppeteer.launch({headless: 'new'});
         const browser = await puppeteer.launch({
-            headless: 'new',
-            args: ['--no-sandbox', '--disable-setuid-sandbox']
-        }); 
+            // headless: 'new',
+            args: [
+                '--disable-setuid-sandbox',
+                '--no-sandbox',
+                '--single-process',
+                '--no-zygote'
+            ],
+            executablePath:process.env.NODE_ENV==="production"?process.env.PUPPETEER_EXECUTABLE_PATH:puppeteer.executablePath(),
+        });
         const page = await browser.newPage();
         await page.setViewport({
             width: 1366,
